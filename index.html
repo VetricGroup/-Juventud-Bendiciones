@@ -2,17 +2,21 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sitio Web de la Iglesia - Juventud Bendiciones</title>
     <style>
-        /* Reseteo básico */
+        /* Reseteo básico y corrección estricta de desborde móvil */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html {
+        html, body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden !important;
+            position: relative;
             scroll-behavior: smooth;
         }
 
@@ -20,7 +24,6 @@
             font-family: 'Helvetica Neue', Arial, sans-serif;
             color: #ffffff;
             background-color: #000000;
-            overflow-x: hidden;
         }
 
         a {
@@ -28,31 +31,31 @@
             color: inherit;
         }
 
-        /* --- ANIMACIONES TOP-TIER Y SCROLL REVEAL --- */
+        /* --- ANIMACIONES ADAPTADAS Y SCROLL REVEAL --- */
         .reveal {
             opacity: 0;
-            transform: translateY(40px);
+            transform: translateY(35px);
             filter: blur(6px);
             transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .reveal-left {
             opacity: 0;
-            transform: translateX(-50px);
+            transform: translateX(-40px);
             filter: blur(6px);
             transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .reveal-right {
             opacity: 0;
-            transform: translateX(50px);
+            transform: translateX(40px);
             filter: blur(6px);
             transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .reveal-scale {
             opacity: 0;
-            transform: scale(0.92);
+            transform: scale(0.94);
             filter: blur(6px);
             transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -63,11 +66,17 @@
             filter: blur(0) !important;
         }
 
-        /* Delays escalonados para tarjetas y elementos */
-        .delay-1 { transition-delay: 0.12s !important; }
-        .delay-2 { transition-delay: 0.25s !important; }
-        .delay-3 { transition-delay: 0.38s !important; }
-        .delay-4 { transition-delay: 0.5s !important; }
+        /* Delays escalonados */
+        .delay-1 { transition-delay: 0.1s !important; }
+        .delay-2 { transition-delay: 0.2s !important; }
+        .delay-3 { transition-delay: 0.3s !important; }
+
+        /* Corrección de animaciones en móviles para evitar desplazamientos horizontales */
+        @media (max-width: 768px) {
+            .reveal-left, .reveal-right {
+                transform: translateY(30px) !important;
+            }
+        }
 
         /* --- PANTALLA DE CARGA (PRELOADER) --- */
         #preloader {
@@ -94,7 +103,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1.8rem;
+            gap: 1.5rem;
             position: relative;
         }
 
@@ -108,8 +117,8 @@
         .logo-glow-wrapper::before {
             content: '';
             position: absolute;
-            width: 160px;
-            height: 160px;
+            width: 140px;
+            height: 140px;
             background: radial-gradient(circle, rgba(120, 90, 220, 0.6) 0%, rgba(60, 90, 200, 0.3) 50%, transparent 70%);
             border-radius: 50%;
             filter: blur(25px);
@@ -117,7 +126,7 @@
         }
 
         .loader-logo {
-            max-height: 85px;
+            max-height: 75px;
             width: auto;
             position: relative;
             z-index: 2;
@@ -127,21 +136,20 @@
 
         @keyframes pulseGlow {
             0% { transform: scale(0.8); opacity: 0.3; }
-            100% { transform: scale(1.4); opacity: 0.9; }
+            100% { transform: scale(1.3); opacity: 0.9; }
         }
 
         @keyframes logoPulse {
             0% { transform: scale(0.95); filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3)); }
-            100% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.9)); }
+            100% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.9)); }
         }
 
         .loader-bar-container {
-            width: 140px;
+            width: 120px;
             height: 2px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 2px;
             overflow: hidden;
-            position: relative;
         }
 
         .loader-bar {
@@ -157,8 +165,8 @@
         }
 
         .loader-text {
-            font-size: 0.75rem;
-            letter-spacing: 4px;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
             color: #888888;
             text-transform: uppercase;
             font-weight: 500;
@@ -177,22 +185,11 @@
             top: 0;
             z-index: 1000;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.4s ease;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
         }
 
         .logo-img {
             max-height: 45px;
             width: auto;
-            transition: transform 0.3s ease;
-        }
-
-        .logo-img:hover {
-            transform: scale(1.05);
         }
 
         nav ul {
@@ -207,23 +204,10 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             transition: color 0.3s ease;
-            position: relative;
-            padding-bottom: 4px;
         }
 
-        nav ul li a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #ffffff;
-            transition: width 0.3s ease;
-        }
-
-        nav ul li a:hover::after {
-            width: 100%;
+        nav ul li a:hover {
+            color: #aaaaaa;
         }
 
         .btn-nav {
@@ -237,42 +221,33 @@
             text-transform: uppercase;
             transition: all 0.3s ease;
             display: inline-block;
-            position: relative;
-            overflow: hidden;
         }
-        
+
         .btn-nav:hover {
             background: #ffffff;
             color: #000000;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
         }
 
         /* Sección Principal (Hero) */
         .hero {
             background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('images/hero.png') center/cover no-repeat;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding-top: 80px;
-            position: relative;
+            padding: 100px 1.5rem 3rem 1.5rem;
+            overflow: hidden;
         }
 
         .hero h1 {
             font-family: 'Georgia', 'Times New Roman', serif;
-            font-size: 5rem;
+            font-size: clamp(2.5rem, 7vw, 5rem);
             font-weight: normal;
-            line-height: 1.1;
-            margin-bottom: 2.5rem;
+            line-height: 1.15;
+            margin-bottom: 2rem;
             max-width: 900px;
-            animation: heroFadeIn 1.2s ease-out forwards;
-        }
-
-        @keyframes heroFadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .btn-main {
@@ -287,19 +262,15 @@
             margin-bottom: 2rem;
             transition: all 0.3s ease;
             display: inline-block;
-            position: relative;
-            overflow: hidden;
         }
 
         .btn-main:hover {
             background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
         }
 
         .service-info {
-            font-size: 1rem;
-            line-height: 1.5;
+            font-size: 0.95rem;
+            line-height: 1.6;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -309,32 +280,22 @@
         .service-info a {
             color: #ffffff;
             text-decoration: underline;
-            transition: opacity 0.3s ease;
-        }
-
-        .service-info a:hover {
-            opacity: 0.8;
         }
 
         .icon-church {
-            width: 30px;
-            height: 30px;
+            width: 28px;
+            height: 28px;
             fill: white;
-            animation: floatIcon 3s infinite alternate ease-in-out;
-        }
-
-        @keyframes floatIcon {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-8px); }
         }
 
         /* --- SECCIÓN 1: Cartelera Minimalista --- */
         .events-section {
             position: relative;
-            padding: 6rem 2rem;
+            padding: 5rem 1.5rem;
             background: #0a0a0a;
             overflow: hidden;
             color: #ffffff;
+            max-width: 100%;
         }
 
         .events-section::before,
@@ -342,49 +303,44 @@
             content: '';
             position: absolute;
             border-radius: 50%;
-            filter: blur(100px);
+            filter: blur(90px);
             z-index: 0;
-            animation: blobFloat 8s infinite alternate ease-in-out;
+            pointer-events: none;
         }
 
         .events-section::before {
-            background: rgba(60, 90, 150, 0.4);
-            width: 500px;
-            height: 500px;
-            top: -100px;
-            left: -150px;
+            background: rgba(60, 90, 150, 0.35);
+            width: 350px;
+            height: 350px;
+            top: -50px;
+            left: -100px;
         }
 
         .events-section::after {
-            background: rgba(100, 60, 150, 0.3);
-            width: 600px;
-            height: 600px;
-            bottom: -200px;
-            right: -100px;
-        }
-
-        @keyframes blobFloat {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, -30px) scale(1.1); }
+            background: rgba(100, 60, 150, 0.25);
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            right: -80px;
         }
 
         .events-header {
             position: relative;
             z-index: 1;
             text-align: center;
-            margin-bottom: 3.5rem;
+            margin-bottom: 3rem;
         }
 
         .events-header h2 {
             font-family: 'Georgia', 'Times New Roman', serif;
-            font-size: 3rem;
+            font-size: clamp(2rem, 5vw, 3rem);
             font-weight: normal;
             margin-bottom: 0.5rem;
         }
 
         .events-header p {
             color: #888888;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             letter-spacing: 3px;
             text-transform: uppercase;
         }
@@ -405,18 +361,9 @@
             padding: 2.5rem;
             display: grid;
             grid-template-columns: 320px 1fr;
-            gap: 3rem;
+            gap: 2.5rem;
             align-items: center;
-            box-shadow: 
-                0 30px 60px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .cartelera-card:hover {
-            border-color: rgba(255, 255, 255, 0.25);
-            transform: translateY(-6px) scale(1.01);
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 255, 255, 0.08);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
         }
 
         .poster-wrapper {
@@ -424,6 +371,7 @@
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            width: 100%;
         }
 
         .poster-img {
@@ -431,11 +379,6 @@
             height: auto;
             display: block;
             border-radius: 16px;
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .poster-wrapper:hover .poster-img {
-            transform: scale(1.05);
         }
 
         .poster-badge {
@@ -444,7 +387,6 @@
             left: 14px;
             background: rgba(0, 0, 0, 0.65);
             backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 0.3rem 0.8rem;
             border-radius: 50px;
@@ -480,7 +422,7 @@
 
         .cartelera-title {
             font-family: 'Georgia', 'Times New Roman', serif;
-            font-size: 2.8rem;
+            font-size: clamp(2rem, 5vw, 2.8rem);
             font-weight: normal;
             line-height: 1.1;
             margin-bottom: 0.5rem;
@@ -488,18 +430,18 @@
         }
 
         .cartelera-subtitle {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             font-style: italic;
             color: #aaaaaa;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             font-family: 'Georgia', serif;
         }
 
         .cartelera-text {
-            font-size: 0.98rem;
+            font-size: 0.95rem;
             color: #cccccc;
             line-height: 1.6;
-            margin-bottom: 1.8rem;
+            margin-bottom: 1.5rem;
             font-weight: 300;
         }
 
@@ -509,12 +451,12 @@
             border-left: 2px solid #ffffff;
             padding: 0.6rem 1.2rem;
             border-radius: 0 8px 8px 0;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
             letter-spacing: 2px;
             text-transform: uppercase;
             color: #ffffff;
-            margin-bottom: 2rem;
+            margin-bottom: 1.8rem;
         }
 
         .cartelera-actions {
@@ -522,75 +464,38 @@
             gap: 1rem;
         }
 
-        /* Botones con Destello de Luz al Pasar el Cursor */
-        .btn-primary {
-            background: #ffffff;
-            color: #000000;
-            border: 1px solid #ffffff;
-            padding: 0.8rem 1.8rem;
+        .btn-primary, .btn-secondary {
+            padding: 0.8rem 1.6rem;
             font-size: 0.8rem;
             letter-spacing: 2px;
             cursor: pointer;
             text-transform: uppercase;
-            font-weight: bold;
             border-radius: 50px;
             transition: all 0.3s ease;
             display: inline-block;
             text-align: center;
-            position: relative;
-            overflow: hidden;
         }
 
-        .btn-primary::after, .btn-main::after, .btn-submit::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(60deg, transparent, rgba(255, 255, 255, 0.5), transparent);
-            transform: rotate(30deg) translateY(-100%);
-            transition: transform 0.7s ease;
-        }
-
-        .btn-primary:hover::after, .btn-main:hover::after, .btn-submit:hover::after {
-            transform: rotate(30deg) translateY(100%);
-        }
-
-        .btn-primary:hover {
-            background: #e6e6e6;
-            border-color: #e6e6e6;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+        .btn-primary {
+            background: #ffffff;
+            color: #000000;
+            border: 1px solid #ffffff;
+            font-weight: bold;
         }
 
         .btn-secondary {
             background: transparent;
             color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 0.8rem 1.8rem;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            cursor: pointer;
-            text-transform: uppercase;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .btn-secondary:hover {
-            border-color: #ffffff;
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-2px);
         }
 
         /* --- SECCIÓN 2: Experiencia JB --- */
         .experience-section {
-            padding: 7rem 2rem;
+            padding: 5rem 1.5rem;
             background: #050507;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
             position: relative;
+            overflow: hidden;
         }
 
         .experience-container {
@@ -601,7 +506,7 @@
         .experience-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            gap: 3.5rem;
             align-items: center;
         }
 
@@ -619,11 +524,6 @@
             display: block;
             object-fit: cover;
             border-radius: 20px;
-            transition: transform 0.6s ease;
-        }
-
-        .experience-image-wrapper:hover .experience-img {
-            transform: scale(1.04);
         }
 
         .experience-content {
@@ -641,7 +541,7 @@
 
         .experience-title {
             font-family: 'Georgia', 'Times New Roman', serif;
-            font-size: 2.6rem;
+            font-size: clamp(1.8rem, 4.5vw, 2.6rem);
             font-weight: normal;
             line-height: 1.2;
             margin-bottom: 0.8rem;
@@ -649,30 +549,25 @@
         }
 
         .experience-subtitle {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: #aaaaaa;
             line-height: 1.5;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
             font-weight: 300;
         }
 
         .experience-list {
             display: flex;
             flex-direction: column;
-            gap: 1.8rem;
+            gap: 1.5rem;
         }
 
         .experience-item {
             display: flex;
-            gap: 1.5rem;
+            gap: 1.2rem;
             align-items: flex-start;
-            padding-bottom: 1.5rem;
+            padding-bottom: 1.2rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            transition: transform 0.3s ease;
-        }
-
-        .experience-item:hover {
-            transform: translateX(6px);
         }
 
         .experience-item:last-child {
@@ -682,29 +577,21 @@
 
         .item-number {
             font-family: 'Georgia', serif;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             color: rgba(255, 255, 255, 0.4);
             font-weight: bold;
-            min-width: 35px;
-            line-height: 1;
-            padding-top: 2px;
-            transition: color 0.3s ease;
-        }
-
-        .experience-item:hover .item-number {
-            color: #ffffff;
+            min-width: 30px;
         }
 
         .item-text h3 {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             color: #ffffff;
-            margin-bottom: 0.4rem;
-            letter-spacing: 0.5px;
+            margin-bottom: 0.3rem;
         }
 
         .item-text p {
-            font-size: 0.92rem;
+            font-size: 0.9rem;
             color: #aaaaaa;
             line-height: 1.6;
             font-weight: 300;
@@ -712,15 +599,16 @@
 
         /* --- SECCIÓN 3: Campamentos JB --- */
         .camps-section {
-            padding: 7rem 2rem;
+            padding: 5rem 1.5rem;
             background: #0a0a0d;
             position: relative;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
         }
 
         .camps-header {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 3.5rem;
         }
 
         .camps-badge {
@@ -734,7 +622,7 @@
 
         .camps-header h2 {
             font-family: 'Georgia', 'Times New Roman', serif;
-            font-size: 3rem;
+            font-size: clamp(2rem, 5vw, 3rem);
             font-weight: normal;
             color: #ffffff;
             margin-bottom: 0.8rem;
@@ -742,7 +630,7 @@
 
         .camps-header p {
             color: #aaaaaa;
-            font-size: 1rem;
+            font-size: 0.95rem;
             max-width: 600px;
             margin: 0 auto;
             font-weight: 300;
@@ -755,31 +643,22 @@
 
         .camps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 3.5rem;
         }
 
         .camp-card {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
             overflow: hidden;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
-            cursor: pointer;
-        }
-
-        .camp-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 255, 255, 0.05);
         }
 
         .camp-image-wrapper {
             position: relative;
-            height: 220px;
+            height: 200px;
             overflow: hidden;
         }
 
@@ -787,11 +666,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .camp-card:hover .camp-img {
-            transform: scale(1.08);
         }
 
         .camp-tag {
@@ -810,19 +684,18 @@
         }
 
         .camp-info {
-            padding: 1.8rem;
+            padding: 1.5rem;
         }
 
         .camp-info h3 {
             font-family: 'Georgia', serif;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             color: #ffffff;
-            margin-bottom: 0.6rem;
-            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
         }
 
         .camp-info p {
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: #aaaaaa;
             line-height: 1.6;
             margin-bottom: 1.2rem;
@@ -830,105 +703,88 @@
         }
 
         .camp-link {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             font-weight: 600;
             color: #ffffff;
-            transition: color 0.3s ease, padding-left 0.3s ease;
-            display: inline-block;
-        }
-
-        .camp-card:hover .camp-link {
-            color: #cccccc;
-            padding-left: 4px;
         }
 
         .next-camp-cta {
             background: rgba(255, 255, 255, 0.04);
             border: 1px dashed rgba(255, 255, 255, 0.2);
             border-radius: 20px;
-            padding: 2.5rem 3rem;
+            padding: 2rem 2.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 2rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .next-camp-cta:hover {
-            border-color: rgba(255, 255, 255, 0.4);
+            gap: 1.5rem;
         }
 
         .cta-text h4 {
             font-family: 'Georgia', serif;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: #ffffff;
             margin-bottom: 0.4rem;
         }
 
         .cta-text p {
             color: #aaaaaa;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
         /* --- SECCIÓN 4: Formulario para Nuevos --- */
         .newcomer-section {
-            padding: 7rem 2rem;
+            padding: 5rem 1.5rem;
             background: #050507;
             position: relative;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
         }
 
         .newcomer-container {
-            max-width: 700px;
+            max-width: 650px;
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
-            padding: 3rem 2.5rem;
+            padding: 2.5rem 1.8rem;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
-            transition: border-color 0.3s ease;
-        }
-
-        .newcomer-container:hover {
-            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .newcomer-header {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
         }
 
         .newcomer-header h2 {
             font-family: 'Georgia', serif;
-            font-size: 2.5rem;
+            font-size: clamp(1.8rem, 4.5vw, 2.4rem);
             color: #ffffff;
-            margin-bottom: 0.6rem;
+            margin-bottom: 0.5rem;
         }
 
         .newcomer-header p {
             color: #aaaaaa;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 300;
         }
 
         .newcomer-form {
             display: flex;
             flex-direction: column;
-            gap: 1.4rem;
+            gap: 1.2rem;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.4rem;
         }
 
         .form-group label {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             color: #cccccc;
@@ -940,17 +796,10 @@
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 12px;
-            padding: 0.9rem 1.2rem;
+            padding: 0.85rem 1rem;
             color: #ffffff;
             font-size: 0.95rem;
             outline: none;
-            transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .form-input:focus, .form-select:focus, .form-textarea:focus {
-            border-color: rgba(255, 255, 255, 0.5);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
         }
 
         .form-select option {
@@ -960,56 +809,48 @@
 
         .form-textarea {
             resize: vertical;
-            min-height: 100px;
+            min-height: 90px;
         }
 
         .btn-submit {
             background: #ffffff;
             color: #000000;
             border: none;
-            padding: 1rem 2rem;
-            font-size: 0.85rem;
+            padding: 0.9rem 1.8rem;
+            font-size: 0.82rem;
             font-weight: bold;
             letter-spacing: 2px;
             cursor: pointer;
             text-transform: uppercase;
             border-radius: 50px;
-            transition: all 0.3s ease;
-            margin-top: 1rem;
+            margin-top: 0.8rem;
             width: 100%;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-submit:hover {
-            background: #e6e6e6;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
         }
 
         /* --- SECCIÓN 5: Ubicación & Mapa --- */
         .map-section {
-            padding: 7rem 2rem;
+            padding: 5rem 1.5rem;
             background: #0a0a0d;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
             position: relative;
+            overflow: hidden;
         }
 
         .map-header {
             text-align: center;
-            margin-bottom: 3.5rem;
+            margin-bottom: 3rem;
         }
 
         .map-header h2 {
             font-family: 'Georgia', serif;
-            font-size: 3rem;
+            font-size: clamp(2rem, 5vw, 3rem);
             color: #ffffff;
-            margin-bottom: 0.6rem;
+            margin-bottom: 0.5rem;
         }
 
         .map-header p {
             color: #888888;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             letter-spacing: 3px;
             text-transform: uppercase;
         }
@@ -1018,28 +859,28 @@
             max-width: 1100px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 360px 1fr;
-            gap: 3rem;
+            grid-template-columns: 340px 1fr;
+            gap: 2.5rem;
             align-items: center;
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 24px;
-            padding: 2.5rem;
+            padding: 2rem;
         }
 
         .map-details h3 {
             font-family: 'Georgia', serif;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: #ffffff;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
         }
 
         .map-details p {
             color: #aaaaaa;
-            font-size: 0.95rem;
-            line-height: 1.7;
-            margin-bottom: 1.8rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
             font-weight: 300;
         }
 
@@ -1047,14 +888,14 @@
             display: flex;
             flex-direction: column;
             gap: 0.8rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.8rem;
         }
 
         .map-meta-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: #dddddd;
         }
 
@@ -1063,22 +904,16 @@
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            font-size: 0.75rem;
-            width: 80px;
+            font-size: 0.72rem;
+            width: 75px;
         }
 
         .map-iframe-wrapper {
             width: 100%;
-            height: 380px;
+            height: 350px;
             border-radius: 16px;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            transition: transform 0.4s ease;
-        }
-
-        .map-container:hover .map-iframe-wrapper {
-            transform: scale(1.01);
         }
 
         .map-iframe-wrapper iframe {
@@ -1092,7 +927,7 @@
         footer {
             background: #020203;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 5rem 3rem 2rem 3rem;
+            padding: 4rem 1.5rem 2rem 1.5rem;
             position: relative;
             overflow: hidden;
         }
@@ -1102,131 +937,115 @@
             margin: 0 auto;
             display: grid;
             grid-template-columns: 2fr 1fr 1.5fr;
-            gap: 4rem;
-            margin-bottom: 4rem;
+            gap: 3rem;
+            margin-bottom: 3.5rem;
         }
 
         .footer-brand {
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
+            gap: 1rem;
         }
 
         .footer-logo {
-            max-height: 45px;
+            max-height: 40px;
             width: auto;
             align-self: flex-start;
         }
 
         .footer-brand p {
             color: #888888;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             line-height: 1.6;
             font-weight: 300;
             max-width: 320px;
         }
 
         .footer-links h4, .footer-social h4 {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             letter-spacing: 3px;
             text-transform: uppercase;
             color: #ffffff;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
         }
 
         .footer-links ul {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 0.8rem;
+            gap: 0.7rem;
         }
 
         .footer-links ul li a {
             color: #888888;
             font-size: 0.85rem;
             letter-spacing: 1px;
-            transition: color 0.3s ease, padding-left 0.3s ease;
-            display: inline-block;
-        }
-
-        .footer-links ul li a:hover {
-            color: #ffffff;
-            padding-left: 4px;
         }
 
         .social-buttons {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.8rem;
         }
 
         .social-btn {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.7rem 1.2rem;
+            padding: 0.65rem 1rem;
             border-radius: 12px;
             color: #dddddd;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             letter-spacing: 1px;
-            transition: all 0.3s ease;
-        }
-
-        .social-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
-            color: #ffffff;
-            transform: translateX(6px);
+            word-break: break-all;
         }
 
         .social-btn svg {
             width: 18px;
             height: 18px;
+            flex-shrink: 0;
             fill: currentColor;
         }
 
         .footer-bottom {
             max-width: 1100px;
             margin: 0 auto;
-            padding-top: 2rem;
+            padding-top: 1.8rem;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
             color: #666666;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
         }
 
-        /* Responsivo para móviles */
+        /* --- OPTIMIZACIÓN EXCLUSIVA PARA PANTALLAS MÓVILES (< 850px) --- */
         @media (max-width: 850px) {
             header {
-                padding: 1rem 1.5rem;
+                padding: 0.9rem 1.2rem;
             }
 
             nav ul {
                 display: none;
             }
 
-            .hero h1 {
-                font-size: 3rem;
+            .btn-nav {
+                padding: 0.5rem 0.9rem;
+                font-size: 0.72rem;
             }
 
             .cartelera-card {
                 grid-template-columns: 1fr;
-                gap: 2rem;
-                padding: 2rem 1.5rem;
+                gap: 1.8rem;
+                padding: 1.8rem 1.2rem;
                 text-align: center;
             }
 
             .poster-wrapper {
-                max-width: 280px;
+                max-width: 260px;
                 margin: 0 auto;
-            }
-
-            .cartelera-title {
-                font-size: 2.2rem;
             }
 
             .cartelera-welcome {
@@ -1234,41 +1053,51 @@
                 border-left: none;
                 border-bottom: 2px solid #ffffff;
                 border-radius: 8px 8px 0 0;
+                padding: 0.5rem 1rem;
             }
 
             .cartelera-actions {
-                justify-content: center;
-                flex-wrap: wrap;
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
             }
 
             .experience-grid {
                 grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-
-            .experience-title {
-                font-size: 2.2rem;
+                gap: 2.5rem;
             }
 
             .next-camp-cta {
                 flex-direction: column;
                 text-align: center;
-                padding: 2rem 1.5rem;
+                padding: 1.8rem 1.2rem;
+            }
+
+            .next-camp-cta .btn-primary {
+                width: 100%;
             }
 
             .map-container {
                 grid-template-columns: 1fr;
-                padding: 1.5rem;
+                padding: 1.5rem 1.2rem;
+                gap: 2rem;
+            }
+
+            .map-iframe-wrapper {
+                height: 280px;
             }
 
             .footer-grid {
                 grid-template-columns: 1fr;
-                gap: 2.5rem;
+                gap: 2.2rem;
             }
 
             .footer-bottom {
                 flex-direction: column;
-                gap: 1rem;
+                gap: 0.8rem;
                 text-align: center;
             }
         }
@@ -1276,7 +1105,7 @@
 </head>
 <body>
 
-    <!-- PANTALLA DE CARGA (PRELOADER CON LUZ NEÓN) -->
+    <!-- PANTALLA DE CARGA (PRELOADER) -->
     <div id="preloader">
         <div class="loader-content">
             <div class="logo-glow-wrapper">
@@ -1597,7 +1426,7 @@
     </footer>
 
     <script>
-        // Ocultar pantalla de carga suavemente tras 1.2 segundos
+        // Preloader
         window.addEventListener('load', function() {
             setTimeout(function() {
                 const preloader = document.getElementById('preloader');
@@ -1607,12 +1436,12 @@
             }, 1200);
         });
 
-        // Intersection Observer para Animaciones al Hacer Scroll
+        // Intersection Observer para Animaciones de Scroll
         document.addEventListener("DOMContentLoaded", function() {
             const observerOptions = {
                 root: null,
-                rootMargin: '0px 0px -50px 0px',
-                threshold: 0.15
+                rootMargin: '0px 0px -40px 0px',
+                threshold: 0.1
             };
 
             const observer = new IntersectionObserver((entries, observer) => {
@@ -1629,7 +1458,7 @@
             });
         });
 
-        // Enviar formulario directamente a WhatsApp
+        // Formulario a WhatsApp
         function enviarFormularioWhatsApp(event) {
             event.preventDefault();
             
