@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitio Web de la Iglesia - Juventud Bendiciones</title>
+    <style>
+        /* Reseteo básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: #ffffff;
+            background-color: #000000;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- ANIMACIONES TOP-TIER Y SCROLL REVEAL --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            filter: blur(6px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            filter: blur(6px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(50px);
+            filter: blur(6px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.92);
+            filter: blur(6px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-active {
+            opacity: 1 !important;
+            transform: translate(0) scale(1) !important;
+            filter: blur(0) !important;
+        }
+
+        /* Delays escalonados para tarjetas y elementos */
+        .delay-1 { transition-delay: 0.12s !important; }
+        .delay-2 { transition-delay: 0.25s !important; }
+        .delay-3 { transition-delay: 0.38s !important; }
+        .delay-4 { transition-delay: 0.5s !important; }
+
+        /* --- PANTALLA DE CARGA (PRELOADER) --- */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #000000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.8rem;
+            position: relative;
+        }
+
+        .logo-glow-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-glow-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            background: radial-gradient(circle, rgba(120, 90, 220, 0.6) 0%, rgba(60, 90, 200, 0.3) 50%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(25px);
+            animation: pulseGlow 2s infinite alternate ease-in-out;
+        }
+
+        .loader-logo {
+            max-height: 85px;
+            width: auto;
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
+            animation: logoPulse 2s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(0.8); opacity: 0.3; }
+            100% { transform: scale(1.4); opacity: 0.9; }
+        }
+
+        @keyframes logoPulse {
+            0% { transform: scale(0.95); filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3)); }
+            100% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.9)); }
+        }
+
+        .loader-bar-container {
+            width: 140px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loader-bar {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, #ffffff, transparent);
+            animation: loadingProgress 1.6s ease-in-out infinite;
+        }
+
+        @keyframes loadingProgress {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .loader-text {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            color: #888888;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        /* Barra de Navegación */
+        header {
+            background-color: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            max-height: 45px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-img:hover {
+            transform: scale(1.05);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav ul li a {
+            color: #ffffff;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ffffff;
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .btn-nav {
+            background: transparent;
+            color: #ffffff;
+            border: 1px solid #ffffff;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-nav:hover {
+            background: #ffffff;
+            color: #000000;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Sección Principal (Hero) */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('images/hero.png') center/cover no-repeat;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 80px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 5rem;
+            font-weight: normal;
+            line-height: 1.1;
+            margin-bottom: 2.5rem;
+            max-width: 900px;
+            animation: heroFadeIn 1.2s ease-out forwards;
+        }
+
+        @keyframes heroFadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-main {
+            background: transparent;
+            color: #ffffff;
+            border: 1px solid #ffffff;
+            padding: 0.8rem 2.5rem;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-main:hover {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .service-info {
+            font-size: 1rem;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .service-info a {
+            color: #ffffff;
+            text-decoration: underline;
+            transition: opacity 0.3s ease;
+        }
+
+        .service-info a:hover {
+            opacity: 0.8;
+        }
+
+        .icon-church {
+            width: 30px;
+            height: 30px;
+            fill: white;
+            animation: floatIcon 3s infinite alternate ease-in-out;
+        }
+
+        @keyframes floatIcon {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-8px); }
+        }
+
+        /* --- SECCIÓN 1: Cartelera Minimalista --- */
+        .events-section {
+            position: relative;
+            padding: 6rem 2rem;
+            background: #0a0a0a;
+            overflow: hidden;
+            color: #ffffff;
+        }
+
+        .events-section::before,
+        .events-section::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: 0;
+            animation: blobFloat 8s infinite alternate ease-in-out;
+        }
+
+        .events-section::before {
+            background: rgba(60, 90, 150, 0.4);
+            width: 500px;
+            height: 500px;
+            top: -100px;
+            left: -150px;
+        }
+
+        .events-section::after {
+            background: rgba(100, 60, 150, 0.3);
+            width: 600px;
+            height: 600px;
+            bottom: -200px;
+            right: -100px;
+        }
+
+        @keyframes blobFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, -30px) scale(1.1); }
+        }
+
+        .events-header {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .events-header h2 {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 3rem;
+            font-weight: normal;
+            margin-bottom: 0.5rem;
+        }
+
+        .events-header p {
+            color: #888888;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .cartelera-container {
+            position: relative;
+            z-index: 1;
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        .cartelera-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 2.5rem;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 3rem;
+            align-items: center;
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cartelera-card:hover {
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 255, 255, 0.08);
+        }
+
+        .poster-wrapper {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+        }
+
+        .poster-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 16px;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .poster-wrapper:hover .poster-img {
+            transform: scale(1.05);
+        }
+
+        .poster-badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .cartelera-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cartelera-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: #aaaaaa;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+        }
+
+        .cartelera-meta .dot {
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+        }
+
+        .cartelera-title {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 2.8rem;
+            font-weight: normal;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .cartelera-subtitle {
+            font-size: 1.15rem;
+            font-style: italic;
+            color: #aaaaaa;
+            margin-bottom: 1.5rem;
+            font-family: 'Georgia', serif;
+        }
+
+        .cartelera-text {
+            font-size: 0.98rem;
+            color: #cccccc;
+            line-height: 1.6;
+            margin-bottom: 1.8rem;
+            font-weight: 300;
+        }
+
+        .cartelera-welcome {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 2px solid #ffffff;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #ffffff;
+            margin-bottom: 2rem;
+        }
+
+        .cartelera-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Botones con Destello de Luz al Pasar el Cursor */
+        .btn-primary {
+            background: #ffffff;
+            color: #000000;
+            border: 1px solid #ffffff;
+            padding: 0.8rem 1.8rem;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::after, .btn-main::after, .btn-submit::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(60deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            transform: rotate(30deg) translateY(-100%);
+            transition: transform 0.7s ease;
+        }
+
+        .btn-primary:hover::after, .btn-main:hover::after, .btn-submit:hover::after {
+            transform: rotate(30deg) translateY(100%);
+        }
+
+        .btn-primary:hover {
+            background: #e6e6e6;
+            border-color: #e6e6e6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.8rem 1.8rem;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-secondary:hover {
+            border-color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        /* --- SECCIÓN 2: Experiencia JB --- */
+        .experience-section {
+            padding: 7rem 2rem;
+            background: #050507;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        .experience-container {
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        .experience-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .experience-image-wrapper {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .experience-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            border-radius: 20px;
+            transition: transform 0.6s ease;
+        }
+
+        .experience-image-wrapper:hover .experience-img {
+            transform: scale(1.04);
+        }
+
+        .experience-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .experience-badge {
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #888888;
+            margin-bottom: 0.8rem;
+        }
+
+        .experience-title {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 2.6rem;
+            font-weight: normal;
+            line-height: 1.2;
+            margin-bottom: 0.8rem;
+            color: #ffffff;
+        }
+
+        .experience-subtitle {
+            font-size: 1rem;
+            color: #aaaaaa;
+            line-height: 1.5;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .experience-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        .experience-item {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            transition: transform 0.3s ease;
+        }
+
+        .experience-item:hover {
+            transform: translateX(6px);
+        }
+
+        .experience-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .item-number {
+            font-family: 'Georgia', serif;
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: bold;
+            min-width: 35px;
+            line-height: 1;
+            padding-top: 2px;
+            transition: color 0.3s ease;
+        }
+
+        .experience-item:hover .item-number {
+            color: #ffffff;
+        }
+
+        .item-text h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.5px;
+        }
+
+        .item-text p {
+            font-size: 0.92rem;
+            color: #aaaaaa;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        /* --- SECCIÓN 3: Campamentos JB --- */
+        .camps-section {
+            padding: 7rem 2rem;
+            background: #0a0a0d;
+            position: relative;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .camps-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .camps-badge {
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #888888;
+            display: block;
+            margin-bottom: 0.8rem;
+        }
+
+        .camps-header h2 {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 3rem;
+            font-weight: normal;
+            color: #ffffff;
+            margin-bottom: 0.8rem;
+        }
+
+        .camps-header p {
+            color: #aaaaaa;
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        .camps-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .camps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .camp-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+            cursor: pointer;
+        }
+
+        .camp-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 255, 255, 0.05);
+        }
+
+        .camp-image-wrapper {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .camp-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .camp-card:hover .camp-img {
+            transform: scale(1.08);
+        }
+
+        .camp-tag {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #ffffff;
+        }
+
+        .camp-info {
+            padding: 1.8rem;
+        }
+
+        .camp-info h3 {
+            font-family: 'Georgia', serif;
+            font-size: 1.5rem;
+            color: #ffffff;
+            margin-bottom: 0.6rem;
+            letter-spacing: 1px;
+        }
+
+        .camp-info p {
+            font-size: 0.9rem;
+            color: #aaaaaa;
+            line-height: 1.6;
+            margin-bottom: 1.2rem;
+            font-weight: 300;
+        }
+
+        .camp-link {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            color: #ffffff;
+            transition: color 0.3s ease, padding-left 0.3s ease;
+            display: inline-block;
+        }
+
+        .camp-card:hover .camp-link {
+            color: #cccccc;
+            padding-left: 4px;
+        }
+
+        .next-camp-cta {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .next-camp-cta:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .cta-text h4 {
+            font-family: 'Georgia', serif;
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 0.4rem;
+        }
+
+        .cta-text p {
+            color: #aaaaaa;
+            font-size: 0.95rem;
+        }
+
+        /* --- SECCIÓN 4: Formulario para Nuevos --- */
+        .newcomer-section {
+            padding: 7rem 2rem;
+            background: #050507;
+            position: relative;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .newcomer-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            transition: border-color 0.3s ease;
+        }
+
+        .newcomer-container:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .newcomer-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .newcomer-header h2 {
+            font-family: 'Georgia', serif;
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 0.6rem;
+        }
+
+        .newcomer-header p {
+            color: #aaaaaa;
+            font-size: 0.95rem;
+            font-weight: 300;
+        }
+
+        .newcomer-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.4rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #cccccc;
+            font-weight: 600;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 0.9rem 1.2rem;
+            color: #ffffff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .form-select option {
+            background: #111111;
+            color: #ffffff;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-submit {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit:hover {
+            background: #e6e6e6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- SECCIÓN 5: Ubicación & Mapa --- */
+        .map-section {
+            padding: 7rem 2rem;
+            background: #0a0a0d;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        .map-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .map-header h2 {
+            font-family: 'Georgia', serif;
+            font-size: 3rem;
+            color: #ffffff;
+            margin-bottom: 0.6rem;
+        }
+
+        .map-header p {
+            color: #888888;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .map-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 3rem;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 2.5rem;
+        }
+
+        .map-details h3 {
+            font-family: 'Georgia', serif;
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 1.2rem;
+        }
+
+        .map-details p {
+            color: #aaaaaa;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1.8rem;
+            font-weight: 300;
+        }
+
+        .map-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .map-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            color: #dddddd;
+        }
+
+        .map-meta-item span {
+            color: #888888;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            width: 80px;
+        }
+
+        .map-iframe-wrapper {
+            width: 100%;
+            height: 380px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            transition: transform 0.4s ease;
+        }
+
+        .map-container:hover .map-iframe-wrapper {
+            transform: scale(1.01);
+        }
+
+        .map-iframe-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            filter: grayscale(80%) invert(90%) contrast(90%);
+        }
+
+        /* --- FOOTER CREATIVO --- */
+        footer {
+            background: #020203;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 5rem 3rem 2rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1.5fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .footer-logo {
+            max-height: 45px;
+            width: auto;
+            align-self: flex-start;
+        }
+
+        .footer-brand p {
+            color: #888888;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            font-weight: 300;
+            max-width: 320px;
+        }
+
+        .footer-links h4, .footer-social h4 {
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-links ul li a {
+            color: #888888;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            transition: color 0.3s ease, padding-left 0.3s ease;
+            display: inline-block;
+        }
+
+        .footer-links ul li a:hover {
+            color: #ffffff;
+            padding-left: 4px;
+        }
+
+        .social-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.7rem 1.2rem;
+            border-radius: 12px;
+            color: #dddddd;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            transform: translateX(6px);
+        }
+
+        .social-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .footer-bottom {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #666666;
+            font-size: 0.8rem;
+        }
+
+        /* Responsivo para móviles */
+        @media (max-width: 850px) {
+            header {
+                padding: 1rem 1.5rem;
+            }
+
+            nav ul {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .cartelera-card {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 2rem 1.5rem;
+                text-align: center;
+            }
+
+            .poster-wrapper {
+                max-width: 280px;
+                margin: 0 auto;
+            }
+
+            .cartelera-title {
+                font-size: 2.2rem;
+            }
+
+            .cartelera-welcome {
+                align-self: center;
+                border-left: none;
+                border-bottom: 2px solid #ffffff;
+                border-radius: 8px 8px 0 0;
+            }
+
+            .cartelera-actions {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .experience-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .experience-title {
+                font-size: 2.2rem;
+            }
+
+            .next-camp-cta {
+                flex-direction: column;
+                text-align: center;
+                padding: 2rem 1.5rem;
+            }
+
+            .map-container {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PANTALLA DE CARGA (PRELOADER CON LUZ NEÓN) -->
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="logo-glow-wrapper">
+                <img src="images/logo.png" alt="Logo Juventud Bendiciones" class="loader-logo">
+            </div>
+            <div class="loader-bar-container">
+                <div class="loader-bar"></div>
+            </div>
+            <span class="loader-text">JUVENTUD BENDICIONES</span>
+        </div>
+    </div>
+
+    <!-- Navegación -->
+    <header>
+        <div class="logo">
+            <img src="images/logo.png" alt="Logo de la Iglesia" class="logo-img">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#conectate">Conéctate</a></li>
+                <li><a href="#cartelera">Cartelera</a></li>
+                <li><a href="#campamentos">Campamentos</a></li>
+                <li><a href="#soy-nuevo">Soy Nuevo</a></li>
+            </ul>
+        </nav>
+        <a href="#soy-nuevo" class="btn-nav">Soy Nuevo</a>
+    </header>
+
+    <!-- Sección Hero -->
+    <section class="hero" id="nosotros">
+        <h1>Dios está a tu favor,<br>y nosotros también.</h1>
+        <a href="https://wa.me/50687524595?text=¡Hola!%20Me%20gustaría%20visitarles%20este%20sábado." target="_blank" class="btn-main">Visítanos</a>
+        
+        <div class="service-info">
+            <svg class="icon-church" viewBox="0 0 24 24">
+                <path d="M12 2L2 12h3v8h14v-8h3L12 2zm0 2.83L17.17 10H6.83L12 4.83z"/>
+            </svg>
+            <p><strong>Del Monumento del Pacto del Jocote, 50 mts. Norte.</strong><br>
+            Alajuela, Alajuela, Costa Rica<br>
+            Sábado 6:00 p. m. - 9:00 p. m.<br>
+            <a href="https://wa.me/50687524595?text=¡Hola!%20Quiero%20más%20información%20sobre%20la%20iglesia." target="_blank">¡Haz clic aquí para más información!</a></p>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 1: Cartelera Minimalista del Evento -->
+    <section class="events-section" id="cartelera">
+        <div class="events-header reveal">
+            <h2>Próxima Temática</h2>
+            <p>En Cartelera este Sábado</p>
+        </div>
+        
+        <div class="cartelera-container">
+            <div class="cartelera-card">
+
+                <div class="poster-wrapper reveal-left">
+                    <span class="poster-badge">En Cartelera</span>
+                    <img src="images/cartelera.png" alt="Cartelera Punto de Control" class="poster-img">
+                </div>
+
+                <div class="cartelera-info reveal-right">
+                    <div class="cartelera-meta">
+                        <span>Este Sábado</span>
+                        <span class="dot"></span>
+                        <span>6:00 PM</span>
+                    </div>
+
+                    <h3 class="cartelera-title">PUNTO DE CONTROL</h3>
+                    <p class="cartelera-subtitle">"Algo está por comenzar"</p>
+
+                    <p class="cartelera-text">
+                        Este sábado prepárate para una noche diferente, llena de sorpresas, diversión y momentos que no te puedes perder!!
+                    </p>
+
+                    <div class="cartelera-welcome">
+                        EN JB TODOS SON BIENVENIDOS
+                    </div>
+
+                    <div class="cartelera-actions">
+                        <a href="https://wa.me/50687524595?text=¡Hola!%20Quiero%20ir%20este%20sábado%20a%20la%20predica%20Punto%20de%20Control." target="_blank" class="btn-primary">¡Acompáñanos!</a>
+                        <a href="https://wa.me/50687524595?text=¡Hola!%20Quiero%20más%20información%20sobre%20la%20temática%20Punto%20de%20Control." target="_blank" class="btn-secondary">Más Información</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 2: ¿Qué te espera todos los sábados en JB? -->
+    <section class="experience-section" id="conectate">
+        <div class="experience-container">
+            <div class="experience-grid">
+
+                <div class="experience-image-wrapper reveal-left">
+                    <img src="images/experiencia.jpg" alt="Experiencia de Adoración en JB" class="experience-img">
+                </div>
+
+                <div class="experience-content">
+                    <span class="experience-badge reveal">Nuestra Experiencia</span>
+                    <h2 class="experience-title reveal">¿Qué te espera todos los sábados en JB?</h2>
+                    <p class="experience-subtitle reveal">Un espacio pensado para que conectes, adores y te sientas en casa desde el primer minuto.</p>
+
+                    <div class="experience-list">
+                        
+                        <div class="experience-item reveal-right delay-1">
+                            <span class="item-number">01</span>
+                            <div class="item-text">
+                                <h3>Música & Adoración</h3>
+                                <p>Un tiempo libre, apasionado y auténtico para conectar con Dios sin máscaras ni presiones.</p>
+                            </div>
+                        </div>
+
+                        <div class="experience-item reveal-right delay-2">
+                            <span class="item-number">02</span>
+                            <div class="item-text">
+                                <h3>Mensajes Reales</h3>
+                                <p>Temáticas actuales diseñadas para las situaciones que enfrentas en tu día a día.</p>
+                            </div>
+                        </div>
+
+                        <div class="experience-item reveal-right delay-3">
+                            <span class="item-number">03</span>
+                            <div class="item-text">
+                                <h3>Comunidad Auténtica</h3>
+                                <p>Un espacio donde puedes ser tú mismo, hacer nuevos amigos y formar parte de una familia.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 3: Campamentos JB -->
+    <section class="camps-section" id="campamentos">
+        <div class="camps-header reveal">
+            <span class="camps-badge">Experiencias Inolvidables</span>
+            <h2>Campamentos JB</h2>
+            <p>Días de aventura, comunidad y transformación que marcan tu vida para siempre.</p>
+        </div>
+
+        <div class="camps-container">
+            <div class="camps-grid">
+
+                <div class="camp-card reveal-scale delay-1">
+                    <div class="camp-image-wrapper">
+                        <span class="camp-tag">Campamento JB</span>
+                        <img src="images/camp1.jpg" alt="Campamento Inquebrantable" class="camp-img">
+                    </div>
+                    <div class="camp-info">
+                        <h3>INQUEBRANTABLE</h3>
+                        <p>Días inolvidables en la montaña rodeados de naturaleza, dinámicas al aire libre y momentos únicos compartidos en comunidad.</p>
+                        <a href="https://wa.me/50687524595?text=¡Hola!%20Quiero%20saber%20más%20sobre%20los%20campamentos%20de%20JB." target="_blank" class="camp-link">Más Información →</a>
+                    </div>
+                </div>
+
+                <div class="camp-card reveal-scale delay-2">
+                    <div class="camp-image-wrapper">
+                        <span class="camp-tag">Retiro de Jóvenes</span>
+                        <img src="images/camp2.jpg" alt="Campamento Punto de Quiebre" class="camp-img">
+                    </div>
+                    <div class="camp-info">
+                        <h3>PUNTO DE QUIEBRE</h3>
+                        <p>Conversaciones honestas, talleres al aire libre y amistades auténticas que fortalecen tu fe y crean lazos para siempre.</p>
+                        <a href="https://wa.me/50687524595?text=¡Hola!%20Quiero%20saber%20más%20sobre%20los%20retiros%20de%20JB." target="_blank" class="camp-link">Más Información →</a>
+                    </div>
+                </div>
+
+                <div class="camp-card reveal-scale delay-3">
+                    <div class="camp-image-wrapper">
+                        <span class="camp-tag">Caminata & Aventura</span>
+                        <img src="images/camp3.jpg" alt="Campamento Raíces" class="camp-img">
+                    </div>
+                    <div class="camp-info">
+                        <h3>RAÍCES</h3>
+                        <p>Excursiones y caminatas por senderos en medio del bosque, retos en equipo y espacios de reflexión en la naturaleza.</p>
+                        <a href="https://wa.me/50687524595?text=¡Hola!%20Quiero%20más%20información%20sobre%20las%20caminatas%20de%20JB." target="_blank" class="camp-link">Más Información →</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="next-camp-cta reveal">
+                <div class="cta-text">
+                    <h4>¿Listo para el próximo campamento?</h4>
+                    <p>No te quedes fuera de la siguiente gran aventura.</p>
+                </div>
+                <a href="https://wa.me/50687524595?text=¡Hola!%20Quiero%20información%20e%20inscribirme%20al%20próximo%20campamento." target="_blank" class="btn-primary">Quiero Más Información</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 4: Formulario para los Nuevos -->
+    <section class="newcomer-section" id="soy-nuevo">
+        <div class="newcomer-container reveal-scale">
+            <div class="newcomer-header">
+                <h2>¿Primera vez en JB?</h2>
+                <p>Déjanos tus datos y nos pondremos en contacto contigo para darte la bienvenida este sábado.</p>
+            </div>
+
+            <form class="newcomer-form" onsubmit="enviarFormularioWhatsApp(event)">
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo</label>
+                    <input type="text" id="nombre" class="form-input" placeholder="Tu nombre y apellido" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono">Número de WhatsApp</label>
+                    <input type="tel" id="telefono" class="form-input" placeholder="Ej: 8888-8888" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="medio">¿Cómo te enteraste de nosotros?</label>
+                    <select id="medio" class="form-select" required>
+                        <option value="Un amigo me invitó">Un amigo me invitó</option>
+                        <option value="Redes Sociales (Instagram/Facebook)">Redes Sociales (Instagram/Facebook)</option>
+                        <option value="Búsqueda en Google / Web">Búsqueda en Google / Web</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="mensaje">Mensaje o Petición (Opcional)</label>
+                    <textarea id="mensaje" class="form-textarea" placeholder="¿Tienes alguna duda o te gustaría que te esperemos este sábado?"></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Enviar por WhatsApp →</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 5: Ubicación & Mapa Google Maps -->
+    <section class="map-section" id="ubicacion">
+        <div class="map-header reveal">
+            <h2>Nuestra Ubicación</h2>
+            <p>Ven a visitarnos este Sábado</p>
+        </div>
+
+        <div class="map-container reveal-scale">
+            <div class="map-details">
+                <h3>Te esperamos en Alajuela</h3>
+                <p>Del Monumento del Pacto del Jocote, 50 mts. Norte. Alajuela, Costa Rica.</p>
+                
+                <div class="map-meta">
+                    <div class="map-meta-item">
+                        <span>Horario</span>
+                        <div>Sábados • 6:00 PM - 9:00 PM</div>
+                    </div>
+                    <div class="map-meta-item">
+                        <span>Dirección</span>
+                        <div>2Q55+QVC, Alajuela</div>
+                    </div>
+                </div>
+
+                <a href="https://maps.google.com/?q=2Q55%2BQVC%2C+Provincia+de+Alajuela%2C+Alajuela" target="_blank" class="btn-primary">Abrir en Google Maps</a>
+            </div>
+
+            <div class="map-iframe-wrapper">
+                <iframe src="https://maps.google.com/maps?q=2Q55%2BQVC%2C%20Provincia%20de%20Alajuela%2C%20Alajuela&t=&z=16&ie=UTF8&iwloc=&output=embed" loading="lazy" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER CREATIVO -->
+    <footer>
+        <div class="footer-grid">
+            
+            <div class="footer-brand reveal delay-1">
+                <img src="images/logo.png" alt="Logo Juventud Bendiciones" class="footer-logo">
+                <p>Un espacio libre, auténtico e inspirador para conectar con Dios y formar parte de una verdadera familia de jóvenes.</p>
+            </div>
+
+            <div class="footer-links reveal delay-2">
+                <h4>Navegación</h4>
+                <ul>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#cartelera">Cartelera</a></li>
+                    <li><a href="#conectate">Conéctate</a></li>
+                    <li><a href="#campamentos">Campamentos</a></li>
+                    <li><a href="#soy-nuevo">Soy Nuevo</a></li>
+                    <li><a href="#ubicacion">Ubicación</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-social reveal delay-3">
+                <h4>Contacto & Redes</h4>
+                <div class="social-buttons">
+                    <a href="https://www.instagram.com/juventudbendiciones?igsh=MWE2YXR6NTVxaGZqbg==" target="_blank" class="social-btn">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        <span>@juventudbendiciones</span>
+                    </a>
+
+                    <a href="https://www.facebook.com/share/1EpqJo2agq/?mibextid=wwXIfr" target="_blank" class="social-btn">
+                        <svg viewBox="0 0 24 24"><path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.374 14.5 5 15.5 5H18V0h-3.808C10.592 0 9 1.583 9 4.615V8z"/></svg>
+                        <span>Facebook</span>
+                    </a>
+
+                    <a href="https://wa.me/50687524595" target="_blank" class="social-btn">
+                        <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                        <span>+506 8752-4595</span>
+                    </a>
+
+                    <a href="mailto:bendicionesalextremo@outlook.com" class="social-btn">
+                        <svg viewBox="0 0 24 24"><path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 4.988l1.324 1.072 1.001.812 1.001-.812 1.324-1.072 4.708 5.812h-14.066l4.708-5.812zm9.201.941l4.623-3.746v9.458l-4.623-5.712z"/></svg>
+                        <span>bendicionesalextremo@outlook.com</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 Juventud Bendiciones (JB). Todos los derechos reservados.</p>
+            <p>Alajuela, Costa Rica</p>
+        </div>
+    </footer>
+
+    <script>
+        // Ocultar pantalla de carga suavemente tras 1.2 segundos
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const preloader = document.getElementById('preloader');
+                if (preloader) {
+                    preloader.classList.add('fade-out');
+                }
+            }, 1200);
+        });
+
+        // Intersection Observer para Animaciones al Hacer Scroll
+        document.addEventListener("DOMContentLoaded", function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px 0px -50px 0px',
+                threshold: 0.15
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal-active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+                observer.observe(el);
+            });
+        });
+
+        // Enviar formulario directamente a WhatsApp
+        function enviarFormularioWhatsApp(event) {
+            event.preventDefault();
+            
+            const nombre = document.getElementById('nombre').value;
+            const telefono = document.getElementById('telefono').value;
+            const medio = document.getElementById('medio').value;
+            const mensaje = document.getElementById('mensaje').value;
+
+            let texto = `¡Hola! Soy nuevo y llené el formulario en la web de JB:\n\n` +
+                        `👤 *Nombre:* ${nombre}\n` +
+                        `📱 *WhatsApp:* ${telefono}\n` +
+                        `📌 *Nos conoció por:* ${medio}`;
+                        
+            if (mensaje.trim() !== '') {
+                texto += `\n💬 *Mensaje:* ${mensaje}`;
+            }
+
+            const urlWhatsApp = `https://wa.me/50687524595?text=${encodeURIComponent(texto)}`;
+            window.open(urlWhatsApp, '_blank');
+        }
+    </script>
+
+</body>
+</html>
